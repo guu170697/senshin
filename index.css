@@ -1,387 +1,66 @@
-*{
-    margin: 0;
-    padding: 0;
+* {
+  margin: 0;
+  padding: 0;
 }
 
-.font{
-    position: absolute;
-    left:30px
-    }
-    .pic-leftwhite {
-        position: absolute;
-        margin-left: 20px;
-        margin-right: 20px;
-        background-color: #fff;
-        width: 200px;
-        height: 780px;
-    
-        top: 160px;
-    }
-    
-    .left_ads {
-        position: relative;
-        top: 20px;
-        left: 20px;
-        width: 100%;
-        height: 780px;
-    }
-    
-    .yellow {
-        position: absolute;
-        top: 0px;
-        border-radius: 32px;
-        background-color: #fff0bc;
-        width: 835px;
-        height: 530px;
-    }
-    .cell {
-        position: relative;
-        margin-top: 20px;
-        margin-left: 20px;
-        width: 250px;
-        height: 150px;
-        cursor: pointer;
-        font-size: 32px;
-        float: left;
-    }
-    .img {
-        position: relative;
-        width: 250px;
-        height: 150px;
-        cursor: pointer;
-    }
-    .moji {
-        position: absolute;
-        width: 100%;
-        display: inline-block;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-shadow: 2px 0 0 #faff00, 0 2px 0 #faff00, -2px 0 0 #faff00, 0 -2px 0 #faff00;
-    }
-    .background-icon {
-        position: absolute;
-        top:100px;
-        left: 0px;
-        width: 100%;
-    }
-    
-    .pic-rightwhite {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        background-color: #fff;
-        width: 342px;
-        height: 710px;
-    }
-    .ads-right-icon {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        width: 301px;
-        height: 250px;
-        object-fit: cover;
-    }
-    
-    .right_ads {
-        position: absolute;
-        left: 20px;
-    }
-    .right-contents {
-        position: absolute;
-        top: 450px;
-        right: 20px;
-        width: 342px;
-        height: 780px;
-    }
-    .meilink {
-        position: absolute;
-        top: 0px;
-        left: 181px;
-        display: inline-block;
-        width: 349px;
-        height: 116px;
-    }
-    .div {
-        position: absolute;
-        top: 125px;
-        left: 0px;
-        font-size: 30px;
-        display: inline-block;
-        width: 722px;
-        height: 51px;
-    }
-    .title {
-        position: absolute;
-        font-size: 28px;
-        text-align: center;
-        top: 143px;
-        left: 633px;
-        width: 654px;
-        height: 176px;
-    }
-    .news-child {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        background-color: rgba(0, 0, 0, 0.5);
-        width: 545px;
-        height: 383px;
-    }
-    .meilink1 {
-        position: absolute;
-        top: 5px;
-        left: 2px;
-        display: inline-block;
-        width: 478px;
-        height: 351px;
-    }
-    .news-list {
-        position: absolute;
-        top: 67px;
-        left: 19px;
-        background-color: rgba(0, 0, 0, 0);
-        width: 501px;
-        height: 276px;
-        overflow-y: auto;
-    }
-    .div1 {
-        position: absolute;
-        top: 16px;
-        left: 19px;
-        font-size: 24px;
-        display: inline-block;
-        width: 250px;
-        height: 51px;
-    }
-    .news {
-        position: absolute;
-        top: 50px;
-        right: 20px;
-        width: 545px;
-        height: 383px;
-    }
-    .bottom-contents-child {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        background-color: #633500;
-        width: 100%;
-        height: 265px;
-    }
-    .div2 {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        display: inline-block;
-        width: 158px;
-        height: 25px;
-        cursor: pointer;
-    }
-    .div3 {
-        position: absolute;
-        top: 36px;
-        left: 0px;
-        display: inline-block;
-        width: 111px;
-        height: 25px;
-        cursor: pointer;
-    }
-    .div4 {
-        position: absolute;
-        top: 72px;
-        left: 0px;
-        display: inline-block;
-        width: 148px;
-        height: 25px;
-        cursor: pointer;
-    }
-    .parent {
-        position: absolute;
-        top: 0px;
-        left: 559px;
-        width: 158px;
-        height: 97px;
-    }
-    .div5 {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        display: inline-block;
-        width: 103px;
-        height: 25px;
-        cursor: pointer;
-    }
-    .div6 {
-        position: absolute;
-        top: 36px;
-        left: 0px;
-        display: inline-block;
-        width: 348px;
-        height: 25px;
-        cursor: pointer;
-    }
-    .div8 {
-        position: absolute;
-        top: 108px;
-        left: 0px;
-        display: inline-block;
-        width: 256px;
-        height: 25px;
-        cursor: pointer;
-    }
-    .div9 {
-        position: absolute;
-        top: 144px;
-        left: 0px;
-        display: inline-block;
-        width: 130px;
-        height: 25px;
-        cursor: pointer;
-    }
-    .div10 {
-        position: absolute;
-        top: 180px;
-        left: 0px;
-        display: inline-block;
-        width: 202px;
-        height: 25px;
-        cursor: pointer;
-    }
-    .group {
-        position: absolute;
-        top: 0px;
-        left: 166px;
-        width: 348px;
-        height: 205px;
-    }
-    .group-parent {
-        position: absolute;
-        top: 38px;
-        left: 46px;
-        width: 717px;
-        height: 205px;
-    }
-    .bottom-contents {
-        position: absolute;
-        top: 1291px;
-        left: 0px;
-        background-color: #fff;
-        width: 100%;
-        height: 282px;
-        overflow: auto;
-    }
-    .pic-presen-icon {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        width: 565px;
-        height: 185px;
-        object-fit: cover;
-        cursor: pointer;
-    }
-    .pic-yarukoto-icon {
-        position: absolute;
-        top: 198px;
-        left: 0px;
-        width: 565px;
-        height: 185px;
-        object-fit: cover;
-        cursor: pointer;
-    }
-    .left-bana {
-        position: absolute;
-        top: 50px;
-        left: 20px;
-        width: 565px;
-        height: 383px;
-    }
-    
-    .pic-kiji-icon {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        border-radius: 18px;
-        width: 400px;
-        height: 230px;
-        object-fit: cover;
-        cursor: pointer;
-    }
-    
-    .main-contents {
-        position: relative;
-        width: 835px;
-        top: 450px;
-        margin-left:20px;
-        height: 780px;
-        text-align: center;
-        font-size: 48px;
-        color: #ff0000;
-    }
-    .main-flame {
-        position: relative;
-        top: 80px;
-        margin-left: auto;
-        margin-right: auto;
-        width: 1250px;
-        height: 1290px;
-    }
-    .pc-topbrown-icon {
-        position: absolute;
-        top: 92px;
-        left: 0px;
-        width: 100%;
-        height: 20px;
-        object-fit: cover;
-    }
-    .pc-topgreen-icon {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 92px;
-        object-fit: cover;
-    }
-    .meilink2 {
-        position: absolute;
-        top: 0%;
-        color: #fff;
-        display: inline-block;
-        width: 222px;
-        height: 92px;
-        margin-left: -111px;
-    }
-    .top-bar {
-        position: absolute;
-        top: 0px;
-        width: 100%;
-        height: 115px;
-        font-size: 64px;
-        font-family: Kurale;
-        text-align: center;
-    }
-    .home {
-        position: relative;
-        background-color: #fff;
-        width: 100%;
-        height: 1080px;
-        text-align: left;
-        color: #fff;
-        font-family: Inter;
-    }
-    
-    .main-bottom{
-        position: relative;
-        top: 220px;
-        background-color: #fff;
-        width: 835px;
-        height: 160px;
-        margin-left: 20px;
-    }
-    
-    .spase {
-        position: absolute;
-        margin-top: 20px;
-        margin-left: 20px;
-    
-    }
+.home {
+  position: relative;
+  background-color: #fff;
+  width: 100%;
+  height: 800px;
+  text-align: left;
+  color: #fff;
+  font-family: Inter;
+}
+
+.background-icon {
+  position: absolute;
+  top: 100px;
+  left: 0;
+  width: 100%;
+}
+
+.top-bar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 115px;
+  font-size: 64px;
+  font-family: Kurale;
+  text-align: center;
+}
+
+.pc-topgreen-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 92px;
+  object-fit: cover;
+}
+
+.pc-topbrown-icon {
+  position: absolute;
+  top: 92px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  object-fit: cover;
+}
+
+.meilink2 {
+  position: relative;
+  top: 0;
+  color: #fff;
+  display: inline-block;
+  width: 400px;
+  height: 92px;
+}
+
+.main-flame {
+  position: relative;
+  top: 80px;
+  margin: 0 auto;
+  width: 1250px;
+  height: 800px;
+}

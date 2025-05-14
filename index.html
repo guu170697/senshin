@@ -1,184 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-  	<meta charset="utf-8">
-  	<meta name="viewport" content="initial-scale=1, width=device-width">
-  	
-  	<link rel="stylesheet"  href="./index.css" />
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" />
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kurale:wght@400&display=swap" />
-    <script src="components/loader.js"></script>
-    <link rel="stylesheet" href="components/loader.css">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="./index.js" async></script>
-  	
-  	
+  <meta charset="UTF-8">
+  <title>センサーデータ表示</title>
+  <style>
+    body { font-family: sans-serif; margin: 30px; }
+    .sensor { padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; }
+  </style>
 </head>
 <body>
-  	
-  	<div class="home">
-    		<img class="background-icon" alt="" src="image/background.png">
+  <h1>センサーデータ（30分おきに更新）</h1>
+  <div id="sensorData">読み込み中...</div>
 
-    		<div class="main-flame">
-				<div class="left-bana">
-					<img class="pic-presen-icon" alt="" src="image/Pic_presen.png" id="picPresenImage">
-					<img class="pic-yarukoto-icon" alt="" src="image/Pic_yarukoto.png" id="picYarukotoImage">
-				</div>
+  <script>
+    async function fetchSensorData() {
+      try {
+        const res = await fetch("http://localhost:5000/api/data");
+        const data = await res.json();
+        const container = document.getElementById("sensorData");
+        container.innerHTML = "";
 
-      			<div class="right-contents">
-        			<div class="pic-rightwhite">
-                        <div class="right_ads">
-                                
-							<font color=00000, size=2>
-								<p id="realtime"></p>天気
+        data.forEach(d => {
+          const div = document.createElement("div");
+          div.className = "sensor";
+          div.innerHTML = `
+            <strong>${d.sensorName}</strong><br>
+            CO2濃度：${d.co2} ppm<br>
+            気温：${d.temperature} ℃<br>
+            湿度：${d.relativeHumidity} %<br>
+            測定時刻：${new Date(d.timestamp).toLocaleString()}
+          `;
+          container.appendChild(div);
+        });
+      } catch (e) {
+        document.getElementById("sensorData").innerText = "取得エラー：" + e;
+      }
+    }
 
-									<select class="form-select" required aria-label="select example" id="selectSport" style="width: 30%;">
-										<option value=230000>名古屋</option>
-										<option value=130000>東京</option>
-										<option value=270000>大阪</option>
-										<option value=400000>福岡</option>
-										<option value=030000>仙台</option>
-										<option value=170000>石川</option>
-										<option value=011000>北海道</option>
-										<option value=471000>沖縄</option>
-									</select>
-									<button id="btn" onclick="getSelectedValue()">選択完了</button>
-								
-						<table>
-							</tr>
-							<tr id="reportDatetime">
-								<th>報告日時</th>
-								<td></td>
-							</tr>
-							<tr id="today">
-								<th>今日の天気</th>
-								<td></td>
-							</tr>
-							<tr id="tomorrow">
-								<th>明日の天気</th>
-								<td></td>
-							</tr>
-						</table></font>
-
-                            <font color=00000, size=2>広告</font><br>
-                            <a href="https://px.a8.net/svt/ejp?a8mat=3YYBO6+1PX3OY+3E1C+66WOX" rel="nofollow">
-                            <img border="0" width="300" height="250" alt="" src="https://www24.a8.net/svt/bgt?aid=240106902104&wid=001&eno=01&mid=s00000015816001040000&mc=1"></a>
-                            <img border="0" width="1" height="1" src="https://www14.a8.net/0.gif?a8mat=3YYBO6+1PX3OY+3E1C+66WOX" alt="">
-
-                            <a href="https://px.a8.net/svt/ejp?a8mat=3YYBO6+10BGOI+39C6+61Z81" rel="nofollow">
-                                <img border="0" width="300" height="250" alt="" src="https://www28.a8.net/svt/bgt?aid=240106902061&wid=001&eno=01&mid=s00000015207001017000&mc=1"></a>
-                                <img border="0" width="1" height="1" src="https://www15.a8.net/0.gif?a8mat=3YYBO6+10BGOI+39C6+61Z81" alt="">
-                        </div>
-        			</div>
-        		</div>
-
-
-      			<div class="news">
-        			<div class="news-child">
-        			
-        				<div class="news-list">
-          					<div class="meilink1">2024.1.9　　Meilinkベータ版公開！</div>
-        				</div>
-        				<div class="div1">～お知らせ～</div>
-      				</div>
-				</div>
-      			
-      			<div class="main-contents">
-                    <div class="yellow" backgroundyellow>
-
-						<div class="cell" >
-							<img class="img" alt="" src="image/Pic_taisaku.png" id="picTaisakuImage">
-							<div class="moji" id="container6">対策の森</div>
-						</div>
-							
-						<div class="cell">
-							<img class="img" alt="" src="image/Pic_circle.png" id="picCircleImage">
-							<div class="moji">
-								  非公認・他大学<br>サークル紹介
-							</div>
-					    </div>
-
-						<div class="cell" id="groupContainer2">
-							<img class="img" alt="" src="image/Pic_vacant.png">
-							<div class="moji">空き教室検索</div>
-					  	</div>
-
-					    <div class="cell" id="container3">
-							<img class="img" alt="" src="image/Pic_matching.png">	
-							<div class="moji">教材・道具マッチング</div>
-					    </div>
-
-						<div class="cell" id="container2">
-							<img class="img" alt="" src="image/Pic_minigame.png">	
-							<div class="moji">ミニゲーム</div>
-						</div>
-
-						<div class="cell" id="container5">
-							<img class="img" alt="" src="image/Pic_keijiban.png">
-							<div class="moji">
-								  なんでも<br>質問掲示板
-							</div>
-						</div>
-
-						<div class="cell">
-							<img class="img" alt="" src="image/Pic_syukatsu.png" id="picSyukatsuImage">	
-							<div class="moji">27卒 就活情報</div>
-					    </div>
-
-						<div class="cell">
-							<img class="img" alt="" src="image/Pic_kiji.png" id="picKijiImage">
-						  	<div class="moji">記事一覧</div>
-					  	</div>
-
-						<div class="cell" id="container7">
-							<img class="img" alt="" src="image/Pic_baito.png">	
-							<div class="moji">バイト相談室</div>
-					  	</div>
-						
-					</div>
-				</div>
-
-				<div class="main-bottom">
-					<div class="spase">
-						<a href="https://px.a8.net/svt/ejp?a8mat=3YYBO6+10BGOI+39C6+65U41" rel="nofollow">
-							<img border="0" width="468" height="60" alt="" src="https://www27.a8.net/svt/bgt?aid=240106902061&wid=001&eno=01&mid=s00000015207001035000&mc=1"></a>
-							<img border="0" width="1" height="1" src="https://www18.a8.net/0.gif?a8mat=3YYBO6+10BGOI+39C6+65U41" alt="">
-
-						<a href="https://px.a8.net/svt/ejp?a8mat=3YYBO6+10BGOI+39C6+62ENL" rel="nofollow">
-							<img border="0" width="468" height="60" alt="" src="https://www27.a8.net/svt/bgt?aid=240106902061&wid=001&eno=01&mid=s00000015207001019000&mc=1"></a>
-							<img border="0" width="1" height="1" src="https://www19.a8.net/0.gif?a8mat=3YYBO6+10BGOI+39C6+62ENL" alt="">
-				    </div>
-				</div>
-					
-			</div>
-				
-				<div class="bottom-contents">
-					<div class="bottom-contents-child">
-					</div>
-					<div class="group-parent">
-						  <div class="parent">
-								<div class="div2" id="text2">27卒就活情報</div>
-								<div class="div3" id="text3">記事一覧</div>
-								<div class="div4" id="text4">バイト相談室</div>
-						  </div>
-						  <div class="group">
-								<div class="div5" id="text5">対策の森</div>
-								<div class="div6" id="text6">非公認・インカレサークル紹介</div>
-								<div class="div4" id="text7">空き教室紹介</div>
-								<div class="div8" id="text8">教材・道具マッチング</div>
-								<div class="div9" id="text9">ミニゲーム</div>
-								<div class="div10" id="text10">何でも質問掲示板</div>
-						  </div>
-					</div>
-			  </div>
-
-    		</div>
-    		<div class="top-bar">
-      			<img class="pc-topbrown-icon" alt="" src="image/Pc_topbrown.png">
-      			<img class="pc-topgreen-icon" alt="" src="image/Pc_topgreen.png">
-      			
-      			<div class="meilink2"><center>Meilink</center></div>
-    		</div>
-  	</div>
-  	</body>
+    fetchSensorData();                      // 初回
+    setInterval(fetchSensorData, 5_000); // 30分おきに更新（1800秒）
+  </script>
+</body>
 </html>
