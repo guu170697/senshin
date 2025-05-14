@@ -10,21 +10,43 @@
       padding: 30px;
       background-color: #fefbf2;
     }
+
     img {
       max-width: 90%;
       height: auto;
       border: 2px solid #ccc;
       border-radius: 10px;
       margin-bottom: 20px;
+      transition: opacity 0.8s ease-in-out;
+      opacity: 1;
     }
+
     #status {
       font-size: 24px;
       margin-bottom: 10px;
+      transition: color 0.5s ease-in-out;
     }
+
     #details {
       font-size: 18px;
       color: #333;
       margin-bottom: 20px;
+    }
+
+    .fade-out {
+      opacity: 0;
+    }
+
+    .increase {
+      color: #c0392b; /* 赤：増加 */
+    }
+
+    .decrease {
+      color: #2980b9; /* 青：減少 */
+    }
+
+    .nochange {
+      color: #555;    /* グレー：変化なし */
     }
   </style>
 </head>
@@ -36,6 +58,9 @@
   <img id="forestImage" src="" alt="森の状態">
 
   <script>
+    let previousCO2 = null;
+    let previousLevel = null;
+
     async function fetchSensorData() {
       try {
         const res = await fetch("http://localhost:5000/api/data");
@@ -61,7 +86,16 @@
         else if (co2 < 600) level = 4;
         else if (co2 < 650) level = 5;
 
-        image.src = `image/${level}.png`;
+        // CO2の比較 → テキスト色変更
+        if (previousCO2 !== null) {
+          if (co2 > previousCO2) {
+            status.className = "increase";
+          } else if (co2 < previousCO2) {
+            status.className = "decrease";
+          } else {
+            status.className = "nochange";
+          }
+        }
 
         status.textContent = `現在のCO₂濃度：${co2} ppm（レベル ${level}）`;
         details.innerHTML = `
@@ -72,6 +106,19 @@
           <strong>測定時刻：</strong>${time}
         `;
 
+        // 画像切り替えアニメーション（前回と異なる場合のみ）
+        if (level !== previousLevel) {
+          image.classList.add("fade-out");
+          setTimeout(() => {
+            image.src = `image/${level}.png?t=${Date.now()}`; // キャッシュ回避
+            image.classList.remove("fade-out");
+          }, 400);
+        }
+
+        // 前回値を更新
+        previousCO2 = co2;
+        previousLevel = level;
+
       } catch (e) {
         document.getElementById("status").textContent = "取得エラー：" + e.message;
         document.getElementById("details").textContent = "";
@@ -79,8 +126,8 @@
       }
     }
 
-    fetchSensorData();                      // 初回
-    setInterval(fetchSensorData, 30000);   // 30秒おきに自動更新
+    fetchSensorData();                      // 初回読み込み
+    setInterval(fetchSensorData, 30000);   // 30秒ごとに自動更新
   </script>
 </body>
 </html>
