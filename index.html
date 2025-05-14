@@ -2,14 +2,16 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>センサーデータ表示</title>
+  <title>センサーデータ表示（テスト用10秒更新）</title>
   <style>
     body { font-family: sans-serif; margin: 30px; }
     .sensor { padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; }
+    #lastUpdate { margin-bottom: 20px; color: green; }
   </style>
 </head>
 <body>
-  <h1>センサーデータ（30分おきに更新）</h1>
+  <h1>センサーデータ（10秒おきに自動更新）</h1>
+  <div id="lastUpdate">初回読み込み中...</div>
   <div id="sensorData">読み込み中...</div>
 
   <script>
@@ -18,6 +20,7 @@
         const res = await fetch("http://localhost:5000/api/data");
         const data = await res.json();
         const container = document.getElementById("sensorData");
+        const lastUpdate = document.getElementById("lastUpdate");
         container.innerHTML = "";
 
         data.forEach(d => {
@@ -32,13 +35,15 @@
           `;
           container.appendChild(div);
         });
+
+        lastUpdate.textContent = "最終更新：" + new Date().toLocaleString();
       } catch (e) {
         document.getElementById("sensorData").innerText = "取得エラー：" + e;
       }
     }
 
-    fetchSensorData();                      // 初回
-    setInterval(fetchSensorData, 5_000); // 30分おきに更新（1800秒）
+    fetchSensorData();                      // 初回読み込み
+    setInterval(fetchSensorData, 10000);   // 10秒ごとに更新（テスト用）
   </script>
 </body>
 </html>
