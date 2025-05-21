@@ -44,23 +44,36 @@
     }
 
     .image-area {
-      width: 480px;
-      height: 480px;
+      position: relative;
+      width: 600px;
+      height: 600px;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      background-color: #ddd;
+      border-radius: 10px;
     }
 
-
-
-    .image-area img {
-      width: 480px;
-      height: 480px;
+    .image-area img#forestImage {
+      width: 600px;
+      height: 600px;
       object-fit: contain;
-      border: 2px solid #ccc;
       border-radius: 10px;
       transition: opacity 0.8s ease-in-out;
+    }
+
+    .animal {
+      position: absolute;
+      width: 120px;
+      bottom: 40px;
+      left: 40px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .animal:hover {
+      transform: scale(1.1);
     }
 
     .fade-out {
@@ -78,6 +91,18 @@
     .nochange {
       color: #555;
     }
+
+    .message-board {
+      width: 600px;
+      background-color: #ffffffdd;
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 18px;
+      margin: 10px auto 0 auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: left;
+    }
   </style>
 </head>
 <body>
@@ -88,14 +113,85 @@
       <div id="status">読み込み中...</div>
       <div id="details"></div>
     </div>
-    <div class="image-area">
-      <img id="forestImage" src="" alt="森の状態">
+    <div>
+      <div class="image-area">
+        <img id="forestImage" src="" alt="森の状態">
+        <img id="animalImage" class="animal" src="" alt="動物" onclick="talk()" />
+      </div>
+      <div class="message-board" id="messageBoard">クリックで話しかけてみよう！</div>
     </div>
   </div>
 
   <script>
+    const animals = [
+      { name: 'リス', image: 'animal_risu.png' },
+      { name: '熊', image: 'animal_kuma.png' },
+      { name: 'ウサギ', image: 'animal_usagi.png' },
+      { name: 'キツネ', image: 'animal_kitsune.png' },
+      { name: 'タヌキ', image: 'animal_tanuki.png' },
+      { name: 'カワウソ', image: 'animal_kawauso.png' },
+      { name: 'インコ', image: 'animal_inko.png' },
+      { name: '猫', image: 'animal_neko.png' }
+    ];
+
+    const messages = {
+      1: [
+        "今日もきれいな空気をありがとう！",
+        "この森はとっても居心地がいいよ！",
+        "すごく快適だね！"
+      ],
+      2: [
+        "空気が新鮮で元気いっぱい！",
+        "自然の力って素晴らしい！",
+        "今日はのびのびできるなぁ！"
+      ],
+      3: [
+        "ちょっと空気がこもってきたかも…？",
+        "そろそろ窓を開けた方がいいかも！",
+        "気分転換に換気しようよ！"
+      ],
+      4: [
+        "空気が重たく感じるなあ…",
+        "もしかしてCO₂が増えてる？換気しよ！",
+        "新しい空気が欲しいな～"
+      ],
+      5: [
+        "空気が苦しいよ！窓を開けてー！",
+        "換気して！今すぐ！",
+        "空気が悪い！お願い、風を入れて！"
+      ],
+      6: [
+        "もはや非常事態！窓を全開にして！",
+        "ううっ…早く換気してくれぇ…！",
+        "このままじゃだめだ！風を入れて！"
+      ]
+    };
+
     let previousCO2 = null;
     let previousLevel = null;
+    let currentAnimal = null;
+    let currentLevel = null;
+
+    function setAnimal(level) {
+      currentLevel = level;
+      currentAnimal = animals[Math.floor(Math.random() * animals.length)];
+      document.getElementById("animalImage").src = `image/${currentAnimal.image}`;
+    }
+
+    function talk() {
+      if (!currentAnimal || !currentLevel) return;
+
+      const lines = messages[currentLevel];
+      const line = lines[Math.floor(Math.random() * lines.length)];
+      const message = `${currentAnimal.name}：${line}`;
+
+      const board = document.getElementById("messageBoard");
+      board.textContent = message;
+
+      const utterance = new SpeechSynthesisUtterance(message);
+      utterance.lang = 'ja-JP';
+      speechSynthesis.speak(utterance);
+    }
 
     async function fetchSensorData() {
       try {
@@ -127,7 +223,7 @@
 
         status.textContent = `現在のCO₂濃度：${co2} ppm（レベル ${level}）`;
         details.innerHTML = `
-          <strong>センサー名：</strong>Ｒ３ー４０１<br>
+          <strong>センサー名：</strong>${target.sensorName}<br>
           <strong>CO₂濃度：</strong>${co2} ppm<br>
           <strong>気温：</strong>${temp} ℃<br>
           <strong>湿度：</strong>${humi} %<br>
@@ -139,6 +235,7 @@
           setTimeout(() => {
             image.src = `image/${level}.png?t=${Date.now()}`;
             image.classList.remove("fade-out");
+            setAnimal(level);
           }, 400);
         }
 
