@@ -80,17 +80,9 @@
       opacity: 0;
     }
 
-    .increase {
-      color: #c0392b;
-    }
-
-    .decrease {
-      color: #2980b9;
-    }
-
-    .nochange {
-      color: #555;
-    }
+    .increase { color: #c0392b; }
+    .decrease { color: #2980b9; }
+    .nochange { color: #555; }
 
     .message-board {
       width: 600px;
@@ -103,10 +95,106 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       text-align: left;
     }
+
+    /* ハンバーガーメニュー */
+    #animalDexToggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #animalDex {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 300px;
+      height: 100%;
+      background-color: #fefbf2;
+      border-left: 2px solid #aaa;
+      box-shadow: -4px 0 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      overflow-y: auto;
+      transition: right 0.3s ease;
+      z-index: 998;
+    }
+
+    #animalDex.open {
+      right: 0;
+    }
+
+    #animalDex h2 {
+      margin-top: 0;
+    }
+
+    #discoveredAnimals {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    #discoveredAnimals div {
+      text-align: center;
+      font-size: 12px;
+    }
+
+    #discoveredAnimals img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+    }
+
+    /* ポップアップ */
+    .popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      width: 300px;
+      animation: popIn 0.3s ease;
+    }
+
+    .popup-content img {
+      width: 150px;
+      height: auto;
+      margin: 10px 0;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
   <h1>CO₂濃度による森の変化</h1>
+
+  <button id="animalDexToggle">図鑑</button>
+
+  <div id="animalDex">
+    <h2>発見した動物図鑑</h2>
+    <div id="discoveredAnimals"></div>
+  </div>
 
   <div class="container">
     <div class="info">
@@ -122,60 +210,54 @@
     </div>
   </div>
 
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <h2>新しい動物を見つけたよ！</h2>
+      <img id="popupImage" src="" alt="New Animal">
+      <p id="popupName"></p>
+      <p id="popupDesc"></p>
+      <button onclick="closePopup()">閉じる</button>
+    </div>
+  </div>
+
   <script>
     const animals = [
-      { name: 'リス', image: 'animal_risu.png' },
-      { name: '熊', image: 'animal_kuma.png' },
-      { name: 'ウサギ', image: 'animal_usagi.png' },
-      { name: 'キツネ', image: 'animal_kitsune.png' },
-      { name: 'タヌキ', image: 'animal_tanuki.png' },
-      { name: 'カワウソ', image: 'animal_kawauso.png' },
-      { name: 'インコ', image: 'animal_inko.png' },
-      { name: '猫', image: 'animal_neko.png' }
+      { name: 'リス', image: 'animal_risu.png', description: '森の守り神で俊敏な動きが得意なリス。' },
+      { name: '熊', image: 'animal_kuma.png', description: '力強いけど優しい、森のリーダー的存在。' },
+      { name: 'ウサギ', image: 'animal_usagi.png', description: 'ぴょんぴょん跳ねる、好奇心旺盛な住人。' },
+      { name: 'キツネ', image: 'animal_kitsune.png', description: 'ずる賢くも礼儀正しい、森の案内人。' },
+      { name: 'タヌキ', image: 'animal_tanuki.png', description: 'いたずら好きだけど憎めない人気者。' },
+      { name: 'カワウソ', image: 'animal_kawauso.png', description: '水辺の遊び達人、元気いっぱい！' },
+      { name: 'インコ', image: 'animal_inko.png', description: 'よくしゃべる情報屋。空から森を見守る。' },
+      { name: '猫', image: 'animal_neko.png', description: 'マイペースな観察者、気ままに登場。' }
     ];
 
     const messages = {
-      1: [
-        "今日もきれいな空気をありがとう！",
-        "この森はとっても居心地がいいよ！",
-        "すごく快適だね！"
-      ],
-      2: [
-        "空気が新鮮で元気いっぱい！",
-        "自然の力って素晴らしい！",
-        "今日はのびのびできるなぁ！"
-      ],
-      3: [
-        "ちょっと空気がこもってきたかも…？",
-        "そろそろ窓を開けた方がいいかも！",
-        "気分転換に換気しようよ！"
-      ],
-      4: [
-        "空気が重たく感じるなあ…",
-        "もしかしてCO₂が増えてる？換気しよ！",
-        "新しい空気が欲しいな～"
-      ],
-      5: [
-        "空気が苦しいよ！窓を開けてー！",
-        "換気して！今すぐ！",
-        "空気が悪い！お願い、風を入れて！"
-      ],
-      6: [
-        "もはや非常事態！窓を全開にして！",
-        "ううっ…早く換気してくれぇ…！",
-        "このままじゃだめだ！風を入れて！"
-      ]
+      1: ["今日もきれいな空気をありがとう！", "この森はとっても居心地がいいよ！", "すごく快適だね！"],
+      2: ["空気が新鮮で元気いっぱい！", "自然の力って素晴らしい！", "今日はのびのびできるなぁ！"],
+      3: ["ちょっと空気がこもってきたかも…？", "そろそろ窓を開けた方がいいかも！", "気分転換に換気しようよ！"],
+      4: ["空気が重たく感じるなあ…", "もしかしてCO₂が増えてる？換気しよ！", "新しい空気が欲しいな～"],
+      5: ["空気が苦しいよ！窓を開けてー！", "換気して！今すぐ！", "空気が悪い！お願い、風を入れて！"],
+      6: ["もはや非常事態！窓を全開にして！", "ううっ…早く換気してくれぇ…！", "このままじゃだめだ！風を入れて！"]
     };
 
     let previousCO2 = null;
     let previousLevel = null;
     let currentAnimal = null;
     let currentLevel = null;
+    const discoveredSet = new Set();
 
     function setAnimal(level) {
       currentLevel = level;
       currentAnimal = animals[Math.floor(Math.random() * animals.length)];
       document.getElementById("animalImage").src = `image/${currentAnimal.image}`;
+
+      const key = currentAnimal.name;
+      const isNew = ![...discoveredSet].some(a => a.name === key);
+      discoveredSet.add(currentAnimal);
+      updateAnimalDex();
+
+      if (isNew) showPopup(currentAnimal);
     }
 
     function talk() {
@@ -191,6 +273,44 @@
       const utterance = new SpeechSynthesisUtterance(message);
       utterance.lang = 'ja-JP';
       speechSynthesis.speak(utterance);
+    }
+
+    function updateAnimalDex() {
+      const container = document.getElementById("discoveredAnimals");
+      container.innerHTML = "";
+
+      discoveredSet.forEach(animal => {
+        const wrapper = document.createElement("div");
+
+        const img = document.createElement("img");
+        img.src = `image/${animal.image}`;
+        img.alt = animal.name;
+
+        const label = document.createElement("div");
+        label.textContent = animal.name;
+        label.style.fontWeight = "bold";
+
+        const desc = document.createElement("div");
+        desc.textContent = animal.description;
+        desc.style.fontSize = "11px";
+        desc.style.color = "#555";
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(label);
+        wrapper.appendChild(desc);
+        container.appendChild(wrapper);
+      });
+    }
+
+    function showPopup(animal) {
+      document.getElementById("popupImage").src = `image/${animal.image}`;
+      document.getElementById("popupName").textContent = animal.name;
+      document.getElementById("popupDesc").textContent = animal.description;
+      document.getElementById("popup").style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
     }
 
     async function fetchSensorData() {
@@ -241,13 +361,16 @@
 
         previousCO2 = co2;
         previousLevel = level;
-
       } catch (e) {
         document.getElementById("status").textContent = "取得エラー：" + e.message;
         document.getElementById("details").textContent = "";
         document.getElementById("forestImage").src = "";
       }
     }
+
+    document.getElementById("animalDexToggle").addEventListener("click", () => {
+      document.getElementById("animalDex").classList.toggle("open");
+    });
 
     fetchSensorData();
     setInterval(fetchSensorData, 30000);
